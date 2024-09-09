@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -157,6 +159,26 @@ public class DonationServiceImpl implements DonationService {
                .limit(limit)
                .data(donations.stream().map(this::convert).toList())
                .build();
+    }
+
+    public PagebleResponse<Map.Entry<String,Integer>> getSumDonationsByGroupDonor(int page,int limit) {
+        Pageable pageable = PageRequest.of(page, limit, Sort.by(Sort.Order.desc("createdAt")));
+        var donations = donationRepository.findAllByDonationStatus("delivered",pageable);
+        Map<String, Integer> donorSum = new HashMap<>();
+        for (Donation d : donations) {
+            if (donorSum.containsKey(d.getUser().getUsername())) {
+                donorSum.put(d.getUser().getUsername(), donorSum.get(d.getUser().getUsername()) + d.getQuantityDonated());
+            } else {
+                donorSum.put(d.getUser().getUsername(), d.getQuantityDonated());
+            }
+        }
+        return PagebleResponse.<Map.Entry<String, Integer>>builder()
+               .total_page(1)
+               .page(page)
+               .limit(limit)
+               .data(donorSum.entrySet())
+               .build();
+
     }
 
     @Override

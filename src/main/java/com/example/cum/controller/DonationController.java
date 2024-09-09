@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -101,6 +103,20 @@ public class DonationController {
         log.info("Getting all donations");
         var donations = donationService.getAllDonations(page, 15);
         return WebResponse.<PagebleResponse<DonationResponse>>builder()
+               .status(HttpStatus.OK)
+               .message("Donations retrieved successfully")
+               .data(donations)
+               .build();
+    }
+
+    @GetMapping(
+            path = "/groups-donor",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse<PagebleResponse<Map.Entry<String,Integer>>> getSum(@RequestParam(defaultValue = "0") int page){
+        log.info("Getting donations by status {}", page);
+        var donations = donationService.getSumDonationsByGroupDonor(page, 15);
+        return WebResponse.<PagebleResponse<Map.Entry<String,Integer>>>builder()
                .status(HttpStatus.OK)
                .message("Donations retrieved successfully")
                .data(donations)

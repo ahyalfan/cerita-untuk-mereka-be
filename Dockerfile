@@ -15,4 +15,4 @@ ENV DB_PASSWORD=root
 ENV DB_PORT=5432
 ENV DB_HOST=postgres
 ENTRYPOINT ["java", "-jar", "/app/Cerita-Untuk-Mereka.jar"]
-EXPOSE 8081
+EXPOSE 8080
