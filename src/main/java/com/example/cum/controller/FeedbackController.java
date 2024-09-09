@@ -91,4 +91,18 @@ public class FeedbackController {
                .data(feedback)
                .build();
     }
+
+    @GetMapping(
+            path = "/donor/{donorId}/orphanages/{orphanagesId}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse<Boolean> getFeedbackByDonorAndOrphanages(@PathVariable String donorId, @PathVariable String orphanagesId) {
+        log.info("Getting feedback for id {}", donorId);
+        var feedback = feedbackService.checkFeedForDonorByOrphanages(donorId, orphanagesId);
+        return WebResponse.<Boolean>builder()
+                .status(HttpStatus.OK)
+                .message("Get feedback successfully")
+                .data(feedback)
+                .build();
+    }
 }

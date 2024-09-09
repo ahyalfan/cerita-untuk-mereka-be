@@ -102,6 +102,13 @@ public class FeedbackServiceImpl implements FeedbackService {
                .build();
     }
 
+    public boolean checkFeedForDonorByOrphanages(String donorId, String orphanageId) {
+        var donor = donorRepository.findById(donorId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "donor not found"));
+        var orphanages = orphanagesRepository.findById(orphanageId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Orphanages not found"));
+
+        return feedbackRepository.findFirstByDonorAndOrphanages(donor, orphanages).isPresent();
+    }
+
     private FeedbackResponse convert(Feedback feedback) {
         return FeedbackResponse.builder()
                .id(feedback.getId())

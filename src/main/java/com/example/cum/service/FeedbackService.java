@@ -12,4 +12,5 @@ public interface FeedbackService {
     PagebleResponse<FeedbackResponse> getFeedbackAll(int page ,int limit);
     PagebleResponse<FeedbackResponse> getFeedbackByDonor(String donorId,int page ,int limit);
     PagebleResponse<FeedbackResponse> getFeedbackByOrphanagesId(String orphanagesId,int page ,int limit);
+    boolean checkFeedForDonorByOrphanages(String donorId, String orphanageId);
 }
